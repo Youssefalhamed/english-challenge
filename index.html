@@ -11,8 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- مكتبة SheetJS لتصدير ملفات Excel حقيقية ومنسقة -->
+    <!-- مكتبة Sheets لتصدير ملفات Excel حقيقية ومنسقة -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- مكتبات Firebase (صيغة Web CDN للتزامن الفوري) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
@@ -52,7 +56,7 @@
             padding-bottom: 50px;
         }
 
-        /* Banner - القسم الأول */
+        /* القسم الأول - Banner */
         .header-banner {
             background: var(--bg-grad);
             color: white;
@@ -62,7 +66,6 @@
             border-bottom-right-radius: 35px;
             box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
         }
-
         .header-banner h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
         .header-banner p { font-size: 1.1rem; opacity: 0.95; }
 
@@ -90,7 +93,6 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-
         .grade-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .grade-card.active { border-color: var(--primary); background: #EEF2FF; }
 
@@ -291,18 +293,8 @@
         }
 
         .opt-btn-p:hover { border-color: #CBD5E1; background: #F1F5F9; }
-
-        .opt-btn-p.correct {
-            background: #D1FAE5 !important;
-            border-color: var(--success) !important;
-            color: #065F46 !important;
-        }
-
-        .opt-btn-p.incorrect {
-            background: #FEE2E2 !important;
-            border-color: var(--danger) !important;
-            color: #991B1B !important;
-        }
+        .opt-btn-p.correct { background: #D1FAE5 !important; border-color: var(--success) !important; color: #065F46 !important; }
+        .opt-btn-p.incorrect { background: #FEE2E2 !important; border-color: var(--danger) !important; color: #991B1B !important; }
 
         .feedback-msg {
             margin-top: 12px;
@@ -317,9 +309,7 @@
         .feedback-msg.show-correct { display: block; background: #D1FAE5; color: #065F46; }
         .feedback-msg.show-incorrect { display: block; background: #FEE2E2; color: #991B1B; }
 
-        /* =================================================== */
-        /* قاسم الصفحات (Section Divider)                      */
-        /* =================================================== */
+        /* Section Divider */
         .page-divider {
             margin: 60px 0 40px;
             position: relative;
@@ -347,13 +337,11 @@
             border-radius: 50px;
             font-size: 1.2rem;
             font-weight: 800;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border: 2px solid #27ae60;
         }
 
-        /* =================================================== */
-        /* تصميم الجزء الثاني: صفحة تحدي الإبداع                 */
-        /* =================================================== */
+        /* تصميم الجزء الثاني: صفحة تحدي الإبداع */
         .challenge-section {
             background: var(--bg);
             border-radius: 24px;
@@ -366,7 +354,7 @@
             padding: 25px 20px;
             border-radius: 20px;
             position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
@@ -385,7 +373,7 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -441,7 +429,7 @@
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--line);
         }
 
@@ -511,7 +499,7 @@
             text-align: right;
             cursor: pointer;
             font-size: 14px;
-            transition: 0.2s;
+            transition: 0.25s;
         }
 
         .opt-btn:hover { background: #f0f4f8; }
@@ -594,9 +582,7 @@
 </head>
 <body>
 
-    <!-- =================================================== -->
-    <!-- القسم الأول: الإثراءات والتغذية الراجعة              -->
-    <!-- =================================================== -->
+    <!-- القسم الأول: الإثراءات والتغذية الراجعة -->
     <header class="header-banner">
         <h1><i class="fa-solid fa-star"></i> التمكين الإثرائي الذكي - Top Goal</h1>
         <p>مدرسة الهيشة الابتدائية | مادة اللغة الإنجليزية</p>
@@ -609,24 +595,24 @@
             <div class="grade-card" onclick="selectGrade('g4', event)">
                 <div class="grade-icon" style="background: var(--primary);"><i class="fa-solid fa-shapes"></i></div>
                 <h2>الصف الرابع الابتدائي</h2>
-                <p style="color:#64748B; font-size:0.85rem; margin-top:8px;">يمكنكِ طلب رمز الدخول الخاص بصفكِ من المعلمة 🌸</p>
+                <p style="color:#64748B; font-size:0.85rem; margin-top:8px">يمكنك طلب رمز الدخول الخاص بصفك من المعلمة 🌸</p>
             </div>
             <div class="grade-card" onclick="selectGrade('g5', event)">
                 <div class="grade-icon" style="background: var(--secondary);"><i class="fa-solid fa-compass"></i></div>
                 <h2>الصف الخامس الابتدائي</h2>
-                <p style="color:#64748B; font-size:0.85rem; margin-top:8px;">يمكنكِ طلب رمز الدخول الخاص بصفكِ من المعلمة 🌸</p>
+                <p style="color:#64748B; font-size:0.85rem; margin-top:8px">يمكنك طلب رمز الدخول الخاص بصفك من المعلمة 🌸</p>
             </div>
             <div class="grade-card" onclick="selectGrade('g6', event)">
                 <div class="grade-icon" style="background: var(--purple);"><i class="fa-solid fa-rocket"></i></div>
                 <h2>الصف السادس الابتدائي</h2>
-                <p style="color:#64748B; font-size:0.85rem; margin-top:8px;">يمكنكِ طلب رمز الدخول الخاص بصفكِ من المعلمة 🌸</p>
+                <p style="color:#64748B; font-size:0.85rem; margin-top:8px">يمكنك طلب رمز الدخول الخاص بصفك من المعلمة 🌸</p>
             </div>
         </div>
 
         <!-- Password Entry Box -->
         <div id="loginBox" class="login-box">
             <h3 id="loginTitle"><i class="fa-solid fa-lock"></i> أدخلي الرمز السري للدخول</h3>
-            <input type="password" id="passInput" class="pass-input" placeholder="••••" maxlength="4">
+            <input type="password" id="passInput" class="pass-input" placeholder="...." maxlength="4">
             <button class="btn-unlock" onclick="validatePassword()">دخول الإثراءات</button>
         </div>
 
@@ -634,29 +620,28 @@
         <div id="g4Content" class="content-area">
             <h2 class="section-title"><i class="fa-solid fa-layer-group" style="color:var(--primary);"></i> البطاقات الإثرائية المباشرة - الصف الرابع</h2>
             <div class="enrichment-grid">
-                
                 <!-- Audio/Visual -->
-                <div class="enrichment-card" style="border-top-color: var(--secondary);">
+                <div class="enrichment-card" style="border-top-color: var(--secondary)">
                     <div>
                         <span class="card-type type-audio">إثراء سمعي وبصري</span>
                         <h3>ضمائر الملكية (Possessive Pronouns)</h3>
                         <div class="media-container">
                             <iframe src="https://www.youtube.com/embed/RkP7qvvLtg0" title="Possessive Pronouns Video" allowfullscreen></iframe>
                         </div>
-                        <div class="card-goal"><strong>الهدف المباشر:</strong> ربط الصوت بالصورة وتثبيت استخدام His / Her / Its.</div>
+                        <div class="card-goal"><strong>الهدف المباشر:</strong> ربط الصوت بالصورة وتثبيت استخدام His/Her/Its.</div>
                     </div>
                 </div>
 
                 <!-- Interactive Game -->
-                <div class="enrichment-card" style="border-top-color: var(--accent);">
+                <div class="enrichment-card" style="border-top-color: var(--accent)">
                     <div>
                         <span class="card-type type-game">لعبة تعليمية تفاعلية</span>
                         <h3>مطابقة العائلة (Family Match)</h3>
-                        <p style="font-size:0.85rem;">اضغطي الكلمة الإنجليزية لترى معناها المباشر:</p>
+                        <p style="font-size:0.85rem">اضغطي الكلمة الإنجليزية لترى معناها المباشر:</p>
                         <div class="interactive-mini-game">
-                            <div class="game-item-btn" onclick="showWordMatch(this, 'Uncle = الخال/العم')">Uncle</div>
-                            <div class="game-item-btn" onclick="showWordMatch(this, 'Aunt = الخالة/العمة')">Aunt</div>
-                            <div class="game-item-btn" onclick="showWordMatch(this, 'Cousin = ابن/ابنة العم')">Cousin</div>
+                            <div class="game-item-btn" onclick="showWordMatch(this, 'Uncle = الخال / العم')">Uncle</div>
+                            <div class="game-item-btn" onclick="showWordMatch(this, 'Aunt = الخالة / العمة')">Aunt</div>
+                            <div class="game-item-btn" onclick="showWordMatch(this, 'Cousin = ابن / ابنة العم')">Cousin</div>
                             <div id="g4GameFeedback" style="margin-top:8px; font-weight:700; color:#B45309; min-height:20px;"></div>
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> جعل التعلم ممتعاً وتحفيز الذاكرة لتثبيت المفردات.</div>
@@ -664,42 +649,41 @@
                 </div>
 
                 <!-- Graded Reading Story -->
-                <div class="enrichment-card" style="border-top-color: var(--pink);">
+                <div class="enrichment-card" style="border-top-color: var(--pink)">
                     <div>
                         <span class="card-type type-story">قصة قراءة متدرجة</span>
                         <h3>My Happy Family</h3>
                         <div class="story-text-box">
-                            "This is my father. His name is Ali.<br>
+                            This is my father. His name is Ali.<br>
                             This is my mother. Her name is Mona.<br>
-                            We are a happy family!"
+                            We are a happy family!
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> الانتقال بالطالبة من الكلمة إلى فهم النص القصير بثقة.</div>
                     </div>
                 </div>
 
                 <!-- Mastery Card -->
-                <div class="enrichment-card" style="border-top-color: var(--purple);">
+                <div class="enrichment-card" style="border-top-color: var(--purple)">
                     <div>
                         <span class="card-type type-mastery">تحدي بطاقة الإتقان</span>
                         <h3>تحدي المقارنة المتقدم (Comparison)</h3>
-                        <p style="font-size:0.9rem;">ركّبي جملة مقارنة بين الفيل والقطة:</p>
+                        <p style="font-size:0.9rem">ركبي جملة مقارنة بين الفيل والقطة:</p>
                         <div style="background:#F3E8FF; padding:10px; border-radius:8px; font-size:0.85rem; color:#581C87; text-align:center; font-weight:700;">
                             An elephant is ________ than a cat.
                         </div>
-                        <button onclick="alert('الإجابة الصحيحة للتحدي: bigger / taller')" style="margin-top:10px; width:100%; border:none; background:var(--purple); color:white; padding:8px; border-radius:8px; cursor:pointer; font-weight:700;">كشف الإجابة للتأكد</button>
+                        <button onclick="alert('الإجابة الصحيحة للتحدي: bigger / taller')" style="margin-top:10px; width: 100%; border:none; background:var(--purple); color:white; padding:8px; border-radius:8px; cursor:pointer; font-weight:700">كشف الإجابة للتأكد</button>
                     </div>
                 </div>
             </div>
 
             <!-- Practice with Immediate Feedback -->
             <h2 class="section-title"><i class="fa-solid fa-circle-check" style="color:var(--success);"></i> التدريب والتغذية الراجعة الفورية</h2>
-            
             <div class="practice-card">
                 <div class="practice-title">1. This is Sara. _______ cat is cute and white.</div>
                 <div class="options-group">
-                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'حاولي مرة أخرى! سارة مؤنث نستخدم معها Her.')"><span>His</span><i class="fa-regular fa-circle"></i></button>
-                    <button class="opt-btn-p" onclick="checkAnswer(this, true, 'رائعة! أحسنتِ اختيار (Her) للمؤنث.')"><span>Her</span><i class="fa-regular fa-circle"></i></button>
-                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'إجابة خاطئة! Its لغير العاقل.')"><span>Its</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'حاولي مرة أخرى، سارة مؤنث نستخدم معها Her.')"><span>His</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, true, 'رائعة أحسنت! اختيار (Her) للمؤنث.')"><span>Her</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'إجابة خاطئة، Its لغير العاقل.')"><span>Its</span><i class="fa-regular fa-circle"></i></button>
                 </div>
                 <div class="feedback-msg"></div>
             </div>
@@ -709,7 +693,7 @@
                 <div class="options-group">
                     <button class="opt-btn-p" onclick="checkAnswer(this, false, 'خطأ، Aunt هي الخالة أو العمة.')"><span>Aunt</span><i class="fa-regular fa-circle"></i></button>
                     <button class="opt-btn-p" onclick="checkAnswer(this, true, 'ممتازة! Uncle تعني العم أو الخال.')"><span>Uncle</span><i class="fa-regular fa-circle"></i></button>
-                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'خطأ، Cousin هو ابن العم/الخال.')"><span>Cousin</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'خطأ، Cousin هو ابن العم / الخال.')"><span>Cousin</span><i class="fa-regular fa-circle"></i></button>
                 </div>
                 <div class="feedback-msg"></div>
             </div>
@@ -719,46 +703,44 @@
         <div id="g5Content" class="content-area">
             <h2 class="section-title"><i class="fa-solid fa-layer-group" style="color:var(--secondary);"></i> البطاقات الإثرائية المباشرة - الصف الخامس</h2>
             <div class="enrichment-grid">
-                
-                <div class="enrichment-card" style="border-top-color: var(--secondary);">
+                <div class="enrichment-card" style="border-top-color: var(--secondary)">
                     <div>
                         <span class="card-type type-audio">إثراء سمعي وبصري</span>
                         <h3>الأفعال الماضية (Past Simple Verbs)</h3>
                         <div class="media-container">
-                            <iframe src="https://www.youtube.com/embed/GVj0SHo5lC4" title="Past Tense Verbs Video" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/GVjOSH05IC4" title="Past Tense Verbs Video" allowfullscreen></iframe>
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> ترسيخ تصاريف الأفعال الماضية العادية والشاذة سمعياً.</div>
                     </div>
                 </div>
 
-                <div class="enrichment-card" style="border-top-color: var(--accent);">
+                <div class="enrichment-card" style="border-top-color: var(--accent)">
                     <div>
                         <span class="card-type type-game">لعبة تعليمية تفاعلية</span>
                         <h3>لعبة الأضداد (Opposites Game)</h3>
-                        <p style="font-size:0.85rem;">اضغطي على الصفة لاكتشاف عكسها مباشرة:</p>
+                        <p style="font-size:0.85rem">اضغطي على الصفة لاكتشاف عكسها مباشرة:</p>
                         <div class="interactive-mini-game">
-                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Cheap x Expensive (رخيص x غالي)')">Cheap</div>
-                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Hot x Cold (حار x بارد)')">Hot</div>
-                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Fast x Slow (سريع x بطيء)')">Fast</div>
+                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Cheap x Expensive')">Cheap</div>
+                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Hot x Cold')">Hot</div>
+                            <div class="game-item-btn" onclick="showWordMatchG5(this, 'Fast x Slow')">Fast</div>
                             <div id="g5GameFeedback" style="margin-top:8px; font-weight:700; color:#B45309; min-height:20px;"></div>
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> استحضار وحفظ الصفات وأضدادها بشكل ممتع.</div>
                     </div>
                 </div>
 
-                <div class="enrichment-card" style="border-top-color: var(--pink);">
+                <div class="enrichment-card" style="border-top-color: var(--pink)">
                     <div>
                         <span class="card-type type-story">قصة قراءة متدرجة</span>
                         <h3>A Day at the Park</h3>
                         <div class="story-text-box">
-                            "Yesterday, Amal went to the park.<br>
+                            Yesterday, Amal went to the park.<br>
                             She played on the swing and bought ice cream.<br>
-                            She was very happy!"
+                            She was very happy!
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> القراءة بفهم واستخراج زمن الماضي من القصة.</div>
                     </div>
                 </div>
-
             </div>
 
             <!-- Practice with Immediate Feedback -->
@@ -766,9 +748,9 @@
             <div class="practice-card">
                 <div class="practice-title">1. They _______ football in the school yesterday.</div>
                 <div class="options-group">
-                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'انتبهي! كلمة yesterday تدل على الماضي.')"><span>play</span><i class="fa-regular fa-circle"></i></button>
-                    <button class="opt-btn-p" onclick="checkAnswer(this, true, 'رائعة! Played فعل ماضٍ صحيحة مع yesterday.')"><span>played</span><i class="fa-regular fa-circle"></i></button>
-                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'خطأ! playing تحتاج إلى is/are قبلها.')"><span>playing</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'انتبهي، كلمة yesterday تدل على الماضي.')"><span>play</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, true, 'رائعة! Played فعل ماض صحيح مع yesterday.')"><span>played</span><i class="fa-regular fa-circle"></i></button>
+                    <button class="opt-btn-p" onclick="checkAnswer(this, false, 'خطأ، playing تحتاج إلى is/are قبلها.')"><span>playing</span><i class="fa-regular fa-circle"></i></button>
                 </div>
                 <div class="feedback-msg"></div>
             </div>
@@ -778,8 +760,7 @@
         <div id="g6Content" class="content-area">
             <h2 class="section-title"><i class="fa-solid fa-layer-group" style="color:var(--purple);"></i> البطاقات الإثرائية المباشرة - الصف السادس</h2>
             <div class="enrichment-grid">
-                
-                <div class="enrichment-card" style="border-top-color: var(--primary);">
+                <div class="enrichment-card" style="border-top-color: var(--primary)">
                     <div>
                         <span class="card-type type-audio">إثراء سمعي وبصري</span>
                         <h3>صياغة المستقبل (Going to for Future)</h3>
@@ -790,11 +771,11 @@
                     </div>
                 </div>
 
-                <div class="enrichment-card" style="border-top-color: var(--accent);">
+                <div class="enrichment-card" style="border-top-color: var(--accent)">
                     <div>
                         <span class="card-type type-game">لعبة تعليمية تفاعلية</span>
-                        <h3>أدوات الاستفهام (Wh- Questions)</h3>
-                        <p style="font-size:0.85rem;">اضغطي الأداة للاطلاع على الاستخدام الفوري:</p>
+                        <h3>أدوات الاستفهام (Wh-Questions)</h3>
+                        <p style="font-size:0.85rem">اضغطي الأداة للاطلاع على الاستخدام الفوري:</p>
                         <div class="interactive-mini-game">
                             <div class="game-item-btn" onclick="showWordMatchG6(this, 'Where = للمكان (Place)')">Where</div>
                             <div class="game-item-btn" onclick="showWordMatchG6(this, 'When = للزمن (Time)')">When</div>
@@ -805,19 +786,18 @@
                     </div>
                 </div>
 
-                <div class="enrichment-card" style="border-top-color: var(--pink);">
+                <div class="enrichment-card" style="border-top-color: var(--pink)">
                     <div>
                         <span class="card-type type-story">قصة قراءة متدرجة</span>
                         <h3>My Dream Job</h3>
                         <div class="story-text-box">
-                            "Omar wants to be a doctor.<br>
+                            Omar wants to be a doctor.<br>
                             He is going to study hard.<br>
-                            He will work in a big hospital."
+                            He will work in a big hospital.
                         </div>
                         <div class="card-goal"><strong>الهدف المباشر:</strong> رفع مهارة الاستيعاب القرائي واستخراج الوظائف والأماكن.</div>
                     </div>
                 </div>
-
             </div>
 
             <!-- Practice with Immediate Feedback -->
@@ -833,25 +813,20 @@
             </div>
         </div>
 
-        <!-- =================================================== -->
-        <!-- قاسم الصفحات (Section Divider)                      -->
-        <!-- =================================================== -->
+        <!-- Section Divider -->
         <div class="page-divider">
-            <span class="page-divider-badge"><i class="fa-solid fa-award"></i> قسم تحدي الإبداع والتمكّن <i class="fa-solid fa-star"></i></span>
+            <span class="page-divider-badge"><i class="fa-solid fa-award"></i> قسم تحدي الإبداع والتمكن <i class="fa-solid fa-star"></i></span>
         </div>
 
-        <!-- =================================================== -->
-        <!-- القسم الثاني: صفحة تحدي الإبداع                     -->
-        <!-- =================================================== -->
+        <!-- القسم الثاني: صفحة تحدي الإبداع -->
         <section class="challenge-section">
-            
             <div class="challenge-header">
                 <!-- زر وضع المعلمة -->
                 <div class="top-action-bar">
-                    <button class="teacher-mode-btn" onclick="openTeacherPanel()">⚙️ وضع المعلمة</button>
+                    <button class="teacher-mode-btn" onclick="openTeacherPanel()">وضع المعلمة 🌸</button>
                 </div>
 
-                <h2 class="main-title">✨ تحدي الإبداع والتمكّن في اللغة الإنجليزية ✨</h2>
+                <h2 class="main-title">✨ تحدي الإبداع والتمكن في اللغة الإنجليزية ✨</h2>
                 <p class="sub-title">برنامج الدعم والتطوير العلاجي اليومي للطالبات 🌸</p>
 
                 <!-- شريط البيانات الرسمية -->
@@ -863,13 +838,12 @@
             </div>
 
             <div class="wrap">
-
                 <!-- خيارات اليوم والفصل -->
                 <div class="card" id="setupCard">
                     <div class="grid-2">
                         <div>
-                            <label><b>اختاري يوم التحدي 📅:</b></label>
-                            <select id="daySelect" onchange="resetAccess()" style="margin-top:6px;">
+                            <label><b>اختاري يوم التحدي:</b></label>
+                            <select id="daySelect" onchange="resetAccess()" style="margin-top:6px">
                                 <option value="sunday">يوم الأحد (الضمائر والعائلة)</option>
                                 <option value="monday">يوم الاثنين (الأفعال والأزمنة)</option>
                                 <option value="tuesday">يوم الثلاثاء (الصفات والمقارنة)</option>
@@ -877,8 +851,8 @@
                             </select>
                         </div>
                         <div>
-                            <label><b>اختاري صفكِ الدراسي 📚:</b></label>
-                            <select id="gradeSelect" onchange="resetAccess()" style="margin-top:6px;">
+                            <label><b>اختاري صفك الدراسي:</b></label>
+                            <select id="gradeSelect" onchange="resetAccess()" style="margin-top:6px">
                                 <option value="g4">الصف الرابع الابتدائي</option>
                                 <option value="g5">الصف الخامس الابتدائي</option>
                                 <option value="g6">الصف السادس الابتدائي</option>
@@ -886,26 +860,26 @@
                         </div>
                     </div>
 
-                    <div id="lockContainer" style="margin-top:15px;">
-                        <label><b>🔑 الرمز السري المخصص للصف:</b></label>
+                    <div id="lockContainer" style="margin-top:15px">
+                        <label><b>الرمز السري المخصص للصف:</b></label>
                         <div class="pass-box">
                             <input type="password" id="gradePassword" placeholder="أدخلي رمز الفصل السري...">
                             <button onclick="verifyGradeCode()">فتح التحدي 🔓</button>
                         </div>
-                        <small style="color:var(--muted);">* يمكنكِ الحصول على رمز الفصل السري من معلّمتكِ.</small>
+                        <small style="color:var(--muted)">* يمكنك الحصول على رمز الفصل السري من معلمتك.</small>
                     </div>
                 </div>
 
                 <!-- أسئلة الطالبة -->
-                <div id="quizContent" style="display:none;">
+                <div id="quizContent" style="display:none">
                     <div class="card">
-                        <label><b>اسم بطلتنا الجميلة 🌸:</b></label>
-                        <input type="text" id="studentName" placeholder="اكتبي اسمكِ الثلاثي هنا..." style="margin-top:6px;">
+                        <label><b>اسم بطلتنا الجميلة:</b></label>
+                        <input type="text" id="studentName" placeholder="اكتبي اسمك الثلاثي هنا..." style="margin-top:6px">
                     </div>
 
                     <div id="questionsContainer"></div>
 
-                    <button class="submit-btn" onclick="submitAnswers()">إرسال الإجابة 🎉</button>
+                    <button class="submit-btn" onclick="submitAnswers()">إرسال الإجابة 🚀</button>
                 </div>
 
                 <div id="lockedPrompt" class="card locked-msg">
@@ -914,21 +888,21 @@
 
                 <!-- رسالة النجاح للطالبة -->
                 <div id="successCard" class="success-card">
-                    <h2 style="color:#1e8449; margin-top:0;">أحسنتِ يا بطلة! 🎉🌸</h2>
-                    <p style="font-size:16px;">تم إرسال إجاباتكِ لليوم بنجاح ورُصدت لدى المعلمة/ منال المعاوي.</p>
-                    <p style="color:var(--muted); font-size:14px;">استعدي لتحدي الغد ورائعة أنتِ دائماً ✨</p>
-                    <button onclick="location.reload()" style="padding:8px 18px; background:var(--ch-primary); color:#fff; border:0; border-radius:8px; cursor:pointer; margin-top:10px;">حل تحدي آخر 🔄</button>
+                    <h2 style="color:#1e8449; margin-top:0">أحسنتِ يا بطلة! 🎉🌸</h2>
+                    <p style="font-size:16px">تم إرسال إجاباتكِ لليوم بنجاح ورُصدت لدى المعلمة/ منال المعاوي.</p>
+                    <p style="color:var(--muted); font-size:14px">استعدي لتحدي الغد ورائعة أنتِ دائماً ✨</p>
+                    <button onclick="location.reload()" style="padding:8px 18px; background:var(--ch-primary); color:#fff; border:0; border-radius:8px; cursor:pointer; margin-top:10px">حل تحدي آخر</button>
                 </div>
 
                 <!-- لوحة المعلمة الخاصة -->
                 <div id="teacherPanel" class="teacher-panel">
                     <h3>📊 لوحة المعلمة الخاصة (إدارة ورصد النتائج)</h3>
-                    <p style="font-size:12px; color:var(--muted);">مدرسة الهيشة الابتدائية | أ. منال المعاوي</p>
+                    <p style="font-size:12px; color:var(--muted)">مدرسة الهيشة الابتدائية | أ. منال المعاوي</p>
 
-                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px; margin-top:10px;">
-                        <button onclick="exportToExcel()" style="padding:9px 15px; background:#27ae60; color:#fff; border:0; border-radius:8px; cursor:pointer; font-weight:bold;">📊 تصدير ملف Excel منسق (.xlsx)</button>
-                        <button onclick="clearAllData()" style="padding:9px 15px; background:#e74c3c; color:#fff; border:0; border-radius:8px; cursor:pointer; font-weight:bold;">🗑 تصفير السجل</button>
-                        <button onclick="closeTeacherPanel()" style="padding:9px 15px; background:#7f8c8d; color:#fff; border:0; border-radius:8px; cursor:pointer;">إغلاق اللوحة ✖</button>
+                    <div style="display: flex; gap:8px; flex-wrap:wrap; margin-bottom:15px; margin-top:10px">
+                        <button onclick="exportToExcel()" style="padding:9px 15px; background:#27ae60; color:#fff; border:0; border-radius:8px; cursor:pointer; font-weight:bold">📊 تصدير ملف Excel منسق (.xlsx)</button>
+                        <button onclick="clearAllData()" style="padding:9px 15px; background:#e74c3c; color:#fff; border:0; border-radius:8px; cursor:pointer; font-weight:bold">🗑️ تصفير السجل</button>
+                        <button onclick="closeTeacherPanel()" style="padding:9px 15px; background:#7f8c8d; color:#fff; border:0; border-radius:8px; cursor:pointer">إغلاق اللوحة X</button>
                     </div>
 
                     <table id="resultsTable">
@@ -951,9 +925,25 @@
     </main>
 
     <script>
-        /* =================================================== */
-        /* السكريبت الخاص بالجزء الأول: منصة الإثراءات         */
-        /* =================================================== */
+        /* =========================================================
+           إعدادات Firebase اللحظية (Firestore)
+        ========================================================= */
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx1XtAhkd3652atdSlATzDEF0Zl4oAHiI",
+            authDomain: "english-challenge-359b6.firebaseapp.com",
+            projectId: "english-challenge-359b6",
+            storageBucket: "english-challenge-359b6.firebasestorage.app",
+            messagingSenderId: "401650956623",
+            appId: "1:401650956623:web:0911af10de0c2eb980ed3a"
+        };
+
+        // تهيئة قواعد بيانات Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        /* =========================================================
+           السكريبت الخاص بالجزء الأول: منصة الإثراءات
+        ========================================================= */
         let currentSelectedGrade = '';
         const passwords = {
             'g4': '4444',
@@ -967,7 +957,6 @@
             if(evt && evt.currentTarget) {
                 evt.currentTarget.classList.add('active');
             }
-
             document.querySelectorAll('.content-area').forEach(el => el.style.display = 'none');
             const loginBox = document.getElementById('loginBox');
             loginBox.style.display = 'block';
@@ -984,19 +973,13 @@
                 document.getElementById(currentSelectedGrade + 'Content').style.display = 'block';
                 document.getElementById(currentSelectedGrade + 'Content').style.animation = 'fadeIn 0.5s ease';
             } else {
-                alert('الرمز السري غير صحيح! يرجى التأكد وإعادة المحاولة.');
+                alert("الرمز السري غير صحيح، يرجى التأكد وإعادة المحاولة!");
             }
         }
 
-        function showWordMatch(element, text) {
-            document.getElementById('g4GameFeedback').innerText = text;
-        }
-        function showWordMatchG5(element, text) {
-            document.getElementById('g5GameFeedback').innerText = text;
-        }
-        function showWordMatchG6(element, text) {
-            document.getElementById('g6GameFeedback').innerText = text;
-        }
+        function showWordMatch(element, text) { document.getElementById('g4GameFeedback').innerText = text; }
+        function showWordMatchG5(element, text) { document.getElementById('g5GameFeedback').innerText = text; }
+        function showWordMatchG6(element, text) { document.getElementById('g6GameFeedback').innerText = text; }
 
         function checkAnswer(btn, isCorrect, feedbackText) {
             const parentCard = btn.closest('.practice-card');
@@ -1021,269 +1004,84 @@
             }
         }
 
-        /* =================================================== */
-        /* السكريبت الخاص بالجزء الثاني: صفحة تحدي الإبداع     */
-        /* =================================================== */
+        /* =========================================================
+           السكريبت الخاص بالجزء الثاني: صفحة تحدي الإبداع
+        ========================================================= */
         const CODES = {
-            g4: "4444",
-            g5: "5555",
-            g6: "6666",
-            teacher: "1234"
+            "g4": "4444",
+            "g5": "5555",
+            "g6": "6666",
+            "teacher": "1234"
         };
 
         const DAILY_DATA = {
             sunday: {
                 g4: [
-                    {
-                        intro: "يا أميرتي الرائعة 🌸.. ضمائر الملكية تساعدنا لنقول لمن تنتمي الأشياء بأسلوب لطيف!",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** نستخدم **Her** للبنت (She -> Her) ونستخدم **His** للولد (He -> His).",
-                        q: "1. This is my sister Nora. ___ bag is blue.",
-                        opts: ["His", "Her", "Its"], ans: 1
-                    },
-                    {
-                        intro: "أنتِ ممتازة دائماً ✨! شجرة العائلة ملونة وجميلة ومهم نعرف مفرداتها.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** أخو الأب أو الأم نطلق عليه بالإنجليزية **uncle**.",
-                        q: "2. My father's brother is my ___.",
-                        opts: ["uncle", "aunt", "sister"], ans: 0
-                    },
-                    {
-                        intro: "بطلتنا الذكية 👏! ترتيب الأرقام الترتيبية يجعل كلامنا منظماً وشيقاً.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الشهر الأول في السنة نطلق عليه **first**.",
-                        q: "3. January is the ___ month of the year.",
-                        opts: ["second", "first", "third"], ans: 1
-                    },
-                    {
-                        intro: "يا شاطرة 🎈! ضمائر الفاعل تجعل الجمل سهلة ورائعة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** نستخدم **They** عندما نتحدث عن مجموعة أفراد.",
-                        q: "4. My friends are happy. ___ are playing.",
-                        opts: ["She", "They", "He"], ans: 1
-                    }
+                    { intro: "يا أميرتي الرائعة.. ضمائر الملكية تساعدنا لنقول لمن تنتمي الأشياء بأسلوب لطيف!", explanation: "تذكر سريع (Quick Tip): للبنت نستخدم **Her** (She -> Her) وللولد نستخدم **His**", q: "1. This is my sister Nora. _____ bag is blue.", opts: ["His", "Her", "Its"], ans: 1 },
+                    { intro: "أنتِ ممتازة دائماً! شجرة العائلة ملونة وجميلة ومهم نعرف مفرداتها.", explanation: "تذكر سريع (Quick Tip): أخو الأب أو الأم نطلق عليه بالإنجليزية **uncle**.", q: "2. My father's brother is my _____.", opts: ["uncle", "aunt", "sister"], ans: 0 },
+                    { intro: "بطلتنا الذكية! ترتيب الأرقام الترتيبية يجعل كلامنا منظماً وشيقاً.", explanation: "تذكر سريع (Quick Tip): الشهر الأول في السنة نطلق عليه **first**.", q: "3. January is the _____ month of the year.", opts: ["second", "first", "third"], ans: 1 },
+                    { intro: "يا شاطرة! ضمائر الفاعل تجعل الجمل سهلة ورائعة.", explanation: "تذكر سريع (Quick Tip): نستخدم **They** عندما نتحدث عن مجموعة أفراد.", q: "4. My friends are happy. _____ are playing.", opts: ["She", "They", "He"], ans: 1 }
                 ],
                 g5: [
-                    {
-                        intro: "مبدعتنا الجميلة 🌟.. الضمائر المنعكسة تصف عمل الأشياء بنفسكِ!",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** مع المفرد المؤنث (She) نستخدم **myself / herself**.",
-                        q: "1. She cleaned the room by ___.",
-                        opts: ["himself", "herself", "itself"], ans: 1
-                    },
-                    {
-                        intro: "يا بطلة 💖! أفراد العائلة والأقارب لهم أسماء محددة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** ابن العَم أو الخال نطلق عليه **cousin**.",
-                        q: "2. My aunt's son is my ___.",
-                        opts: ["brother", "cousin", "father"], ans: 1
-                    },
-                    {
-                        intro: "ذكية أنتِ 🌸! اختيار الضمير الصحيح يزيد من جمال إجابتكِ.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** لشيء غير عاقل مفرد نستخدم **Its** للملكية.",
-                        q: "3. The cat is eating ___ food.",
-                        opts: ["his", "her", "its"], ans: 2
-                    }
+                    { intro: "مبدعتنا الجميلة.. الضمائر المنعكسة تصف عمل الأشياء بنفسك!", explanation: "تذكر سريع (Quick Tip): مع المفرد المؤنث (She) نستخدم **myself / herself**.", q: "1. She cleaned the room by _____.", opts: ["himself", "herself", "itself"], ans: 1 },
+                    { intro: "يا بطلة! أفراد العائلة والأقارب لهم أسماء محددة.", explanation: "تذكر سريع (Quick Tip): ابن العم أو الخال نطلق عليه **cousin**.", q: "2. My aunt's son is my _____.", opts: ["brother", "cousin", "father"], ans: 1 },
+                    { intro: "ذكية أنتِ! اختيار الضمير الصحيح يزيد من جمال إجابتك.", explanation: "تذكر سريع (Quick Tip): لشيء غير عاقل مفرد نستخدم **Its** للملكية.", q: "3. The cat is eating _____ food.", opts: ["his", "her", "its"], ans: 2 }
                 ],
                 g6: [
-                    {
-                        intro: "يا متفوقة 🦋! ضمائر الفاعل والمفعول به تعبر عن المعنى بدقة عالية.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** عندما يأتي الضمير بعد الفعل نستخدم ضمير المفعول **him / her / us**.",
-                        q: "1. Ahmed is my friend. I saw ___ at school.",
-                        opts: ["he", "him", "his"], ans: 1
-                    },
-                    {
-                        intro: "مبدعتنا الرائعة ✨! العلاقات العائلية بالإنجليزية ممتعة وسهلة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الجدّ والجدّة نطلق عليهما **grandparents**.",
-                        q: "2. My father and mother's parents are my ___.",
-                        opts: ["grandparents", "parents", "uncles"], ans: 0
-                    },
-                    {
-                        intro: "يا شاطرة 🌈! ملكية الأشياء المخصصة والمستقلة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** نستخدم **Ours** لملكيتنا (Our house is ours).",
-                        q: "3. This school belongs to us. It is ___.",
-                        opts: ["ours", "theirs", "yours"], ans: 0
-                    }
+                    { intro: "يا متفوقة! ضمائر الفاعل والمفعول به تعبر عن المعنى بدقة عالية.", explanation: "تذكر سريع (Quick Tip): عندما يأتي الضمير بعد الفعل نستخدم ضمير المفعول **him / her / us**.", q: "1. Ahmed is my friend. I saw _____ at school.", opts: ["he", "him", "his"], ans: 1 },
+                    { intro: "مبدعتنا الرائعة! العلاقات العائلية بالإنجليزية ممتعة وسهلة.", explanation: "تذكر سريع (Quick Tip): الجد والجدة نطلق عليهما **grandparents**.", q: "2. My father and mother's parents are my _____.", opts: ["grandparents", "parents", "uncles"], ans: 0 },
+                    { intro: "يا شاطرة! ملكية الأشياء المخصصة والمستقلة.", explanation: "تذكر سريع (Quick Tip): نستخدم **Ours** لملكيتنا (Our house is ours).", q: "3. This school belongs to us. It is _____.", opts: ["ours", "theirs", "yours"], ans: 0 }
                 ]
             },
             monday: {
                 g4: [
-                    {
-                        intro: "يا مبدعة 🎈! أحداث الأمس والتي انتهت نستخدم معها الماضي البسيط.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** مع المفرد في الماضي نستخدم **was**.",
-                        q: "1. I ___ at school yesterday.",
-                        opts: ["were", "am", "was"], ans: 2
-                    },
-                    {
-                        intro: "ذكية ومتفوقة 🦋! ترتيب الكلمات في الجملة يجعل معناها واضحاً.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الكلمة الدالة على التكرار تأتي قبل الفعل الأساسي.",
-                        q: "2. Choose the correct sentence:",
-                        opts: ["She often plays tennis.", "Often plays she tennis.", "She plays often tennis."], ans: 0
-                    },
-                    {
-                        intro: "يا شاطرة 🌷! الأفعال اليومية في المضارع البسيط.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** مع (He / She / It) نضيف **s** للفعل.",
-                        q: "3. Ali ___ his teeth every morning.",
-                        opts: ["brush", "brushes", "brushed"], ans: 1
-                    }
+                    { intro: "يا مبدعة! أحداث الأمس والتي انتهت نستخدم معها الماضي البسيط.", explanation: "تذكر سريع (Quick Tip): مع المفرد في الماضي نستخدم **was**.", q: "1. I _____ at school yesterday.", opts: ["were", "am", "was"], ans: 2 },
+                    { intro: "ذكية ومتفوقة! ترتيب الكلمات في الجملة يجعل معناها واضحاً.", explanation: "تذكر سريع (Quick Tip): الكلمة الدالة على التكرار تأتي قبل الفعل الأساسي.", q: "2. Choose the correct sentence:", opts: ["She often plays tennis.", "Often plays she tennis.", "She plays often tennis."], ans: 0 },
+                    { intro: "يا شاطرة! الأفعال اليومية في المضارع البسيط.", explanation: "تذكر سريع (Quick Tip): نضيف s/es للفعل مع He / She / It.", q: "3. Ali _____ his teeth every morning.", opts: ["brush", "brushes", "brushed"], ans: 1 }
                 ],
                 g5: [
-                    {
-                        intro: "يا شاطرة 🎈! مع المضارع البسيط والأفعال اليومية ننتبه للمفرد.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** مع المفرد نضع للفعل حرف **s** مثل: **goes**.",
-                        q: "1. My sister ___ to school every morning.",
-                        opts: ["go", "gone", "goes"], ans: 2
-                    },
-                    {
-                        intro: "يا بطلة المستقبل 🌈! الأفعال الماضية تعبر عما قمنا به وانتهى.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الكلمات مثل (yesterday) تأخذ فعلاً ماضياً بـ **ed**.",
-                        q: "2. We ___ a new game yesterday.",
-                        opts: ["play", "played", "are playing"], ans: 1
-                    },
-                    {
-                        intro: "مستواكِ ممتاز ✨! الأفعال الشاذة في الماضي تجعل لغتكِ أقوى.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الماضي من الفعل (go) هو **went**.",
-                        q: "3. Last weekend, my family ___ to the beach.",
-                        opts: ["go", "went", "going"], ans: 1
-                    }
+                    { intro: "يا شاطرة! مع المضارع البسيط والأفعال اليومية ننتبه للمفرد.", explanation: "تذكر سريع (Quick Tip): مع المفرد نضع للفعل حرف s مثل **goes**.", q: "1. My sister _____ to school every morning.", opts: ["go", "gone", "goes"], ans: 2 },
+                    { intro: "يا بطلة المستقبل! الأفعال الماضية تعبر عما قمنا به وانتهى.", explanation: "تذكر سريع (Quick Tip): الكلمات مثل (yesterday) تأخذ فعلاً ماضياً بـ **ed**.", q: "2. We _____ a new game yesterday.", opts: ["play", "played", "are playing"], ans: 1 },
+                    { intro: "مستواكِ ممتاز! الأفعال الشاذة في الماضي تجعل لغتك أقوى.", explanation: "تذكر سريع (Quick Tip): الماضي من الفعل (go) هو **went**.", q: "3. Last weekend, my family _____ to the beach.", opts: ["go", "went", "going"], ans: 1 }
                 ],
                 g6: [
-                    {
-                        intro: "يا بطلة المستقبل 🌈! الأحداث التي انتهت بالأمس نستخدم معها الماضي الشاذ.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الفعل الماضي الشاذ من (buy) هو **bought**.",
-                        q: "1. Yesterday, my mom ___ a new dress.",
-                        opts: ["buy", "bought", "buying"], ans: 1
-                    },
-                    {
-                        intro: "يا شاطرة 🎈! التخطيط للمستقبل قريب حدوثه يعبر بأسلوب جميل.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** للتعبير عن المستقبل القريب نستخدم **am/is/are going to**.",
-                        q: "2. Tomorrow, I ___ visit my grandparents.",
-                        opts: ["go", "am going to", "went to"], ans: 1
-                    },
-                    {
-                        intro: "مبدعة دائماً ✨! الأفعال المستمرة أثناء الحديث الآن.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** مع (now) نستخدم **is/are + verb-ing**.",
-                        q: "3. Look! The kids ___ in the garden now.",
-                        opts: ["play", "are playing", "played"], ans: 1
-                    }
+                    { intro: "يا بطلة المستقبل! الأحداث التي انتهت بالأمس نستخدم معها الماضي الشاذ.", explanation: "تذكر سريع (Quick Tip): الفعل الماضي الشاذ من (buy) هو **bought**.", q: "1. Yesterday, my mom _____ a new dress.", opts: ["buy", "bought", "buying"], ans: 1 },
+                    { intro: "يا شاطرة! التخطيط للمستقبل قريب حدوثه يعبر بأسلوب جميل.", explanation: "تذكر سريع (Quick Tip): للتعبير عن المستقبل القريب نستخدم **am/is/are going to**.", q: "2. Tomorrow, I _____ visit my grandparents.", opts: ["go", "am going to", "went to"], ans: 1 },
+                    { intro: "مبدعة دائماً! الأفعال المستمرة أثناء الحديث الآن.", explanation: "تذكر سريع (Quick Tip): مع (now) نستخدم **is/are + verb-ing**.", q: "3. Look! The kids _____ in the garden now.", opts: ["play", "are playing", "played"], ans: 1 }
                 ]
             },
             tuesday: {
                 g4: [
-                    {
-                        intro: "يا شاطرة 🌷! المقارنة بين الأشياء تظهر مدى دقة مهاراتكِ.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** عند تفضيل شيء على الجميع نستخدم **the + est**.",
-                        q: "1. The blue whale is the ___ animal in the world.",
-                        opts: ["bigger", "biggest", "big"], ans: 1
-                    },
-                    {
-                        intro: "رائعة أنتِ 💖! الصفات تعبر عن الأشياء بأسلوب واضح.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** عكس كلمة (hot) هو **cold**.",
-                        q: "2. Ice cream is very ___.",
-                        opts: ["hot", "cold", "fast"], ans: 1
-                    },
-                    {
-                        intro: "بطلتنا المتميزة 🌸! استخدام صفات الوصف البسيطة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الزرافة تتميز بالطول **tall**.",
-                        q: "3. A giraffe is a ___ animal.",
-                        opts: ["short", "tall", "small"], ans: 1
-                    }
+                    { intro: "يا شاطرة! المقارنة بين الأشياء تظهر مدى دقة مهاراتك.", explanation: "تذكر سريع (Quick Tip): عند تفضيل شيء على الجميع نستخدم **the + est**.", q: "1. The blue whale is the _____ animal in the world.", opts: ["bigger", "biggest", "big"], ans: 1 },
+                    { intro: "رائعة أنتِ! الصفات تعبر عن الأشياء بأسلوب واضح.", explanation: "تذكر سريع (Quick Tip): عكس كلمة (hot) هو **cold**.", q: "2. Ice cream is very _____.", opts: ["hot", "cold", "fast"], ans: 1 },
+                    { intro: "بطلتنا المتميزة! استخدام صفات الوصف البسيطة.", explanation: "تذكر سريع (Quick Tip): الزرافة تتميز بالطول **tall**.", q: "3. A giraffe is a _____ animal.", opts: ["short", "tall", "small"], ans: 1 }
                 ],
                 g5: [
-                    {
-                        intro: "رائعة أنتِ 💖! الصفات تعبر عن مشاعرنا بطريقة جميلة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** عندما يفوز فريقنا نكون سعداء **happy** 😊.",
-                        q: "1. Sara feels ___ because her team won.",
-                        opts: ["happy", "sad", "tired"], ans: 0
-                    },
-                    {
-                        intro: "مستواكِ في تصاعد مستمر ✨! معرفة عكس الكلمات تقوي حصيلتكِ.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** عكس كلمة رخيص (cheap) هو غالي الثمن **expensive**.",
-                        q: "2. Choose the opposite of the word 'cheap':",
-                        opts: ["clean", "expensive", "heavy"], ans: 1
-                    },
-                    {
-                        intro: "يا شاطرة 🌷! المقارنة بين مكانين أو أمرين بنفس الوقت.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** المقارنة بين اثنين نستخدم صفة مع **er + than**.",
-                        q: "3. Summer is ___ than winter.",
-                        opts: ["hotter", "hottest", "hot"], ans: 0
-                    }
+                    { intro: "رائعة أنتِ! الصفات تعبر عن مشاعرنا بطريقة جميلة.", explanation: "تذكر سريع (Quick Tip): عندما يفوز فريقنا نكون سعداء **happy**.", q: "1. Sara feels _____ because her team won.", opts: ["happy", "sad", "tired"], ans: 0 },
+                    { intro: "مستواكِ في تصاعد مستمر! معرفة عكس الكلمات تقوي حصيلتك.", explanation: "تذكر سريع (Quick Tip): عكس كلمة رخيص (cheap) هو غالي الثمن **expensive**.", q: "2. Choose the opposite of the word 'cheap':", opts: ["clean", "expensive", "heavy"], ans: 1 },
+                    { intro: "يا شاطرة! المقارنة بين مكانين أو أمرين بنفس الوقت.", explanation: "تذكر سريع (Quick Tip): للمقارنة بين اثنين نستخدم صفة مع **er + than**.", q: "3. Summer is _____ than winter.", opts: ["hotter", "hottest", "hot"], ans: 0 }
                 ],
                 g6: [
-                    {
-                        intro: "ذكية ومتفوقة 🦋! المقارنة بين أمرين تظهر قوتكِ في اللغة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** للمقارنة بين أمرين نضيف للصفة **er + than**.",
-                        q: "1. An elephant is ___ than a cat.",
-                        opts: ["bigger", "biggest", "big"], ans: 0
-                    },
-                    {
-                        intro: "مبدعة دائماً ✨! المقارنة التفضيلية للكلمات الطويلة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الصفات الطويلة نستخدم معها **the most + adjective**.",
-                        q: "2. Planes are the ___ way to travel.",
-                        opts: ["more fast", "most comfortable", "faster"], ans: 1
-                    },
-                    {
-                        intro: "يا بطلة 🌸! صفات الأحوال التي تصف طريقة القيام بالفعل.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الظرف ينتهي غالباً بـ **ly** مثل **quickly**.",
-                        q: "3. He runs very ___ to win the race.",
-                        opts: ["quick", "quickly", "quicker"], ans: 1
-                    }
+                    { intro: "ذكية ومتفوقة! المقارنة بين أمرين تظهر قوتك في اللغة.", explanation: "تذكر سريع (Quick Tip): للمقارنة بين أمرين نضيف للصفة **er + than**.", q: "1. An elephant is _____ than a cat.", opts: ["bigger", "biggest", "big"], ans: 0 },
+                    { intro: "مبدعة دائماً! المقارنة التفضيلية للكلمات الطويلة.", explanation: "تذكر سريع (Quick Tip): الصفات الطويلة نستخدم معها **the most + adjective**.", q: "2. Planes are the _____ way to travel.", opts: ["more fast", "most comfortable", "faster"], ans: 1 },
+                    { intro: "يا بطلة! صفات الأحوال التي تصف طريقة القيام بالفعل.", explanation: "تذكر سريع (Quick Tip): الظرف ينتهي غالباً بـ **ly** مثل **quickly**.", q: "3. He runs very _____ to win the race.", opts: ["quick", "quickly", "quicker"], ans: 1 }
                 ]
             },
             wednesday: {
                 g4: [
-                    {
-                        intro: "مبدعتنا الجميلة 🌟.. كتابة الأرقام بالحروف مهارة تجعل خطكِ مميزاً!",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الرقم ( 7 ) يكتب بالإنجليزية **seven**.",
-                        q: "1. Which word is the number ( 7 )?",
-                        opts: ["nine", "four", "seven"], ans: 2
-                    },
-                    {
-                        intro: "بطلة الفهم والذكاء 💖! أدوات الاستفهام البسيطة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** للسؤال عن الأشياء نستخدم **What**.",
-                        q: "2. ___ is your name? - My name is Reem.",
-                        opts: ["What", "Where", "Who"], ans: 0
-                    },
-                    {
-                        intro: "جميلتكِ القراءة والاستكشاف 📖! استخراج المعلومات السريعة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** المكان الذي نبتاع منه الخبز هو **bakery**.",
-                        q: "3. We buy fresh bread from the ___.",
-                        opts: ["bakery", "library", "park"], ans: 0
-                    }
+                    { intro: "مبدعتنا الجميلة.. كتابة الأرقام بالحروف مهارة تجعل خطك مميزاً!", explanation: "تذكر سريع (Quick Tip): الرقم (7) يكتب بالإنجليزية **seven**.", q: "1. Which word is the number (7)?", opts: ["nine", "four", "seven"], ans: 2 },
+                    { intro: "بطلة الفهم والذكاء! أدوات الاستفهام البسيطة.", explanation: "تذكر سريع (Quick Tip): للسؤال عن الأشياء نستخدم **What**.", q: "2. _____ is your name? - My name is Reem.", opts: ["What", "Where", "Who"], ans: 0 },
+                    { intro: "جميلتكِ القراءة والاستكشاف! استخراج المعلومات السريعة.", explanation: "تذكر سريع (Quick Tip): المكان الذي نبتاع منه الخبز هو **bakery**.", q: "3. We buy fresh bread from the _____.", opts: ["bakery", "library", "park"], ans: 0 }
                 ],
                 g5: [
-                    {
-                        intro: "بطلتنا المتميزة 🌸! عند سفرنا للمطار نحتاج وثائق مهمة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** الوثيقة التي نظهرها في المطار هي جواز السفر **passport**.",
-                        q: "1. You show this at the airport when you travel:",
-                        opts: ["a menu", "a passport", "a newspaper"], ans: 1
-                    },
-                    {
-                        intro: "ذكية أنتِ ✨! السؤال عن الأماكن والاتجاهات.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** للسؤال عن المكان نستخدم **Where**.",
-                        q: "2. ___ is the hospital? - It is near the park.",
-                        opts: ["Where", "When", "Why"], ans: 0
-                    },
-                    {
-                        intro: "يا شاطرة 🌷! فهم النص القصير واستخراج الإجابة.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** اقرئي النص بتركيز واستخرجي الوقت المطلوب.",
-                        q: "3. Amal goes to school at 7:00 AM. What time does Amal go to school?",
-                        opts: ["at 8:00 AM", "at 7:00 AM", "at 9:00 AM"], ans: 1
-                    }
+                    { intro: "بطلتنا المتميزة! عند سفرنا للمطار نحتاج وثائق مهمة.", explanation: "تذكر سريع (Quick Tip): الوثيقة التي نظهرها في المطار هي جواز السفر **passport**.", q: "1. You show this at the airport when you travel:", opts: ["a menu", "a passport", "a newspaper"], ans: 1 },
+                    { intro: "ذكية أنتِ! السؤال عن الأماكن والاتجاهات.", explanation: "تذكر سريع (Quick Tip): للسؤال عن المكان نستخدم **Where**.", q: "2. _____ is the hospital? - It is near the park.", opts: ["Where", "When", "Why"], ans: 0 },
+                    { intro: "يا شاطرة! فهم النص القصير واستخراج الإجابة.", explanation: "تذكر سريع (Quick Tip): اقرئي النص بتركيز واستخرجي الوقت المطلوب.", q: "3. Amal goes to school at 7:00 AM. What time does Amal go to school?", opts: ["at 8:00 AM", "at 7:00 AM", "at 9:00 AM"], ans: 1 }
                 ],
                 g6: [
-                    {
-                        intro: "جميلتكِ القراءة والاستكشاف 📖! الأماكن في المدينة مفيدة جداً.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** المكان الذي نستعير منه الكتب هو المكتبة **library**.",
-                        q: "1. We can borrow books from the ___.",
-                        opts: ["library", "bakery", "airport"], ans: 0
-                    },
-                    {
-                        intro: "مبدعتنا الرائعة ✨! أدوات الاستفهام تساعدنا في سؤال المكان والزمان.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** للسؤال عن الوقت والزمن نستخدم **When**.",
-                        q: "2. ___ is your birthday? - It is in May.",
-                        opts: ["Where", "What", "When"], ans: 2
-                    },
-                    {
-                        intro: "بطلة الفهم والذكاء 💖! قراءة النص الصغير واستخراج الإجابة مهارة عالية.",
-                        explanation: "💡 **تذكر سريع (Quick Tip):** اقرئي النص بتمعن واستخرجي الحدث المطلوب مباشرة.",
-                        q: "3. Nora gets up at 6. She walks to school. After school, she does her homework. What does Nora do after school?",
-                        opts: ["She does her homework.", "She walks to school.", "She gets up at 6."], ans: 0
-                    }
+                    { intro: "جميلتكِ القراءة والاستكشاف! الأماكن في المدينة مفيدة جداً.", explanation: "تذكر سريع (Quick Tip): المكان الذي نستعير منه الكتب هو المكتبة **library**.", q: "1. We can borrow books from the _____.", opts: ["library", "bakery", "airport"], ans: 0 },
+                    { intro: "مبدعتنا الرائعة! أدوات الاستفهام تساعدنا في سؤال المكان والزمان.", explanation: "تذكر سريع (Quick Tip): للسؤال عن الوقت والزمن نستخدم **When**.", q: "2. _____ is your birthday? - It is in May.", opts: ["Where", "What", "When"], ans: 2 },
+                    { intro: "بطلة الفهم والذكاء! قراءة النص الصغير واستخراج الإجابة مهارة عالية.", explanation: "تذكر سريع (Quick Tip): اقرئي النص بتمعن واستخرجي الحدث المطلوب مباشرة.", q: "3. Nora gets up at 6. She walks to school. After school, she does her homework. What does Nora do after school?", opts: ["She does her homework.", "She walks to school.", "She gets up at 6."], ans: 0 }
                 ]
             }
         };
@@ -1306,7 +1104,7 @@
                 document.getElementById('lockedPrompt').style.display = 'none';
                 loadQuestions();
             } else {
-                alert("❌ الرمز السري الخاص بهذا الصف غير صحيح!");
+                alert("الرمز السري الخاص بهذا الصف غير صحيح!");
             }
         }
 
@@ -1318,7 +1116,6 @@
             userChoices = {};
 
             const list = DAILY_DATA[day][grade];
-
             list.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -1345,13 +1142,14 @@
             userChoices[qIdx] = oIdx;
         }
 
+        /* إرسال الإجابات إلى قواعد بيانات Firebase اللحظية */
         function submitAnswers() {
             const name = document.getElementById('studentName').value.trim();
             const dayKey = document.getElementById('daySelect').value;
             const gradeKey = document.getElementById('gradeSelect').value;
 
             if(!name) {
-                alert("فضلاً أعدي كتابة اسم الطالبة قبل الإرسال 🌸");
+                alert("فضلاً أعدي كتابة اسم الطالبة قبل الإرسال");
                 return;
             }
 
@@ -1369,25 +1167,31 @@
                 grade: gradeName,
                 day: dayName,
                 score: `${score}/${list.length}`,
-                time: new Date().toLocaleString('ar-SA')
+                time: new Date().toLocaleString('ar-SA'),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            const store = JSON.parse(localStorage.getItem('eval_records_daily') || '[]');
-            store.push(newRecord);
-            localStorage.setItem('eval_records_daily', JSON.stringify(store));
-
-            document.getElementById('quizContent').style.display = 'none';
-            document.getElementById('setupCard').style.display = 'none';
-            document.getElementById('successCard').style.display = 'block';
+            // الحفظ في Firebase Firestore بدلاً من LocalStorage
+            db.collection("eval_records").add(newRecord)
+            .then(() => {
+                document.getElementById('quizContent').style.display = 'none';
+                document.getElementById('setupCard').style.display = 'none';
+                document.getElementById('successCard').style.display = 'block';
+            })
+            .catch((error) => {
+                alert("حدث خطأ أثناء الإرسال، يرجى إعادة المحاولة.");
+                console.error("Error writing document: ", error);
+            });
         }
 
+        /* فتح لوحة المعلمة */
         function openTeacherPanel() {
-            const pass = prompt("🔐 أدخلي الرمز السري الخاص بالمعلمة:");
+            const pass = prompt("أدخلي الرمز السري الخاص بالمعلمة:");
             if(pass === CODES.teacher) {
                 document.getElementById('teacherPanel').style.display = 'block';
                 renderResults();
             } else if(pass !== null) {
-                alert("❌ الرمز السري غير صحيح!");
+                alert("الرمز السري غير صحيح!");
             }
         }
 
@@ -1395,65 +1199,85 @@
             document.getElementById('teacherPanel').style.display = 'none';
         }
 
+        // متغير محلي لحفظ البيانات الحالية للتصدير لـ Excel
+        let currentExportData = [];
+
+        /* جلب النتائج لحظياً (Real-time Listener) من Firebase */
         function renderResults() {
             const tbody = document.querySelector('#resultsTable tbody');
-            tbody.innerHTML = '';
-            const store = JSON.parse(localStorage.getItem('eval_records_daily') || '[]');
+            tbody.innerHTML = '<tr><td colspan="5">جاري جلب البيانات والتحديث اللحظي...</td></tr>';
 
-            store.forEach(r => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${r.name}</td><td>${r.grade}</td><td>${r.day}</td><td><b>${r.score}</b></td><td>${r.time}</td>`;
-                tbody.appendChild(tr);
+            // الاستماع اللحظي للتغييرات
+            db.collection("eval_records").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
+                tbody.innerHTML = '';
+                currentExportData = [];
+
+                querySnapshot.forEach((doc) => {
+                    const r = doc.data();
+                    currentExportData.push(r);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r.name}</td><td>${r.grade}</td><td>${r.day}</td><td><b>${r.score}</b></td><td>${r.time || ''}</td>`;
+                    tbody.appendChild(tr);
+                });
+
+                if (currentExportData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5">لا توجد نتائج مسجلة حتى الآن.</td></tr>';
+                }
+            }, (error) => {
+                tbody.innerHTML = '<tr><td colspan="5">حدث خطأ في تحميل السجل.</td></tr>';
+                console.error("Firestore listen error: ", error);
             });
         }
 
-        /* =================================================== */
         /* تصدير ملف Excel مصمم ومنسق بشكل جدول احترافي (.xlsx) */
-        /* =================================================== */
         function exportToExcel() {
-            const store = JSON.parse(localStorage.getItem('eval_records_daily') || '[]');
-            if(store.length === 0) {
+            if(currentExportData.length === 0) {
                 alert("لا توجد بيانات محفوظة لتصديرها.");
                 return;
             }
 
-            // إعداد مصفوفة البيانات بترويسة مخصصة
             const excelData = [
                 ["اسم الطالبة", "الصف الدراسي", "يوم التحدي", "النتيجة", "تاريخ ووقت الإرسال"]
             ];
 
-            store.forEach(r => {
-                excelData.push([r.name, r.grade, r.day, r.score, r.time]);
+            currentExportData.forEach(r => {
+                excelData.push([r.name, r.grade, r.day, r.score, r.time || '']);
             });
 
-            // إنشاء ورقة العمل (Worksheet)
             const worksheet = XLSX.utils.aoa_to_sheet(excelData);
 
-            // تفعيل الاتجاه من اليمين إلى اليسار (RTL) ليكون جاهزاً باللغة العربية
             if(!worksheet['!views']) worksheet['!views'] = [];
             worksheet['!views'].push({ RTL: true });
 
-            // ضبط عرض الأعمدة تلقائياً لتبدو البيانات مرتبة بدون تداخل
             worksheet['!cols'] = [
-                { wch: 25 }, // اسم الطالبة
-                { wch: 22 }, // الصف الدراسي
-                { wch: 30 }, // يوم التحدي
-                { wch: 12 }, // النتيجة
-                { wch: 25 }  // التاريخ والوقت
+                { wch: 25 },
+                { wch: 22 },
+                { wch: 30 },
+                { wch: 12 },
+                { wch: 25 }
             ];
 
-            // إنشاء كتاب العمل (Workbook) وحفظه بصيغة .xlsx
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "نتائج الطالبات");
-
-            XLSX.writeFile(workbook, `نتائج_تحدي_مدرسة_الهيشة.xlsx`);
+            XLSX.writeFile(workbook, "نتائج_تحدي_مدرسة_الهيشة.xlsx");
         }
 
+        /* تصفير السجل من Firebase */
         function clearAllData() {
-            if(confirm("هل أنتِ متأكدة من تصفير سجل النتائج بالكامل؟")) {
-                localStorage.removeItem('eval_records_daily');
-                renderResults();
-                alert("تم تصفير السجل بنجاح.");
+            if(confirm("هل أنتِ متأكدة من تصفير سجل النتائج بالكامل من السيرفر؟")) {
+                db.collection("eval_records").get().then((querySnapshot) => {
+                    const batch = db.batch();
+                    querySnapshot.forEach((doc) => {
+                        batch.delete(doc.ref);
+                    });
+                    return batch.commit();
+                }).then(() => {
+                    alert("تم تصفير السجل بنجاح.");
+                }).catch((error) => {
+                    alert("حدث خطأ أثناء تصفير السجل.");
+                    console.error("Error clearing data: ", error);
+                });
             }
         }
     </script>
